@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    username: root
+    password: 123456
+    #Wzy6022679!
+    url: jdbc:mysql://192.168.45.80:3306/mysql?useUnicode=true&characterEncoding=utf8&autoReconnect=true&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+    schema:
+      - classpath:risunking.sql
+    initialization-mode: always
+    continue-on-error: false
+server:
+  port: 9999
+logging:
+  config:
+    - classpath:logback-boot.xml
