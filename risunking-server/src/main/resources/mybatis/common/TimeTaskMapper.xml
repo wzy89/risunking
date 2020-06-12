@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzy.risunking.common.dao.TimeTaskDao">
+
+    <update id="updateTask" parameterType="java.lang.String">
+        UPDATE risunking.time_task
+        <trim prefix="set" suffixOverrides=",">
+            <if test="timeRule != null and timeRule != ''">
+                task_expression=#{timeRule},
+            </if>
+            <if test="taskSwitch != null and taskSwitch != ''">
+                task_switch=#{taskSwitch},
+            </if>
+            <if test="taskDesc != null and taskDesc != ''">
+                task_desc=#{taskDesc},
+            </if>
+        </trim>
+        where task_name=#{taskName}
+    </update>
+
+    <select id="getAllEffectiveTasks" resultType="java.util.HashMap" >
+        SELECT task_name AS taskName, task_expression AS timeRule, task_desc AS taskDesc FROM risunking.time_task WHERE task_switch=1
+    </select>
+
+    <select id="getEffectiveTask" resultType="java.util.HashMap" parameterType="java.lang.String">
+         SELECT task_name AS taskName, task_expression AS timeRule, task_desc AS taskDesc FROM risunking.time_task WHERE task_switch=1 AND task_name=#{taskName}
+    </select>
+
+</mapper>
