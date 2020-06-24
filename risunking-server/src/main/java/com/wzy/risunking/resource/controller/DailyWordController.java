@@ -18,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @CrossOrigin
-@RequestMapping(value = "web/resource")
+@RequestMapping(value = "web/resource/dailyWord")
 public class DailyWordController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class DailyWordController {
      *
      * @return
      */
-    @RequestMapping(value = "/dailyWord",method = RequestMethod.POST)
+    @RequestMapping(value = "/list",method = RequestMethod.POST)
     public List<DailyWordInfo> dailyWordList(){
         return dailyWordService.dailyWordList();
     }

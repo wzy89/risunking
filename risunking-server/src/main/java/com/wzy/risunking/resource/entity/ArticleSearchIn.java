@@ -1,10 +1,10 @@
 package com.wzy.risunking.resource.entity;
 
 /**
- * ResourceSearchIn
+ * ArticleSearchIn
  *
  * @author Wangzy
  * @date 2020/4/23 17:21
  */
-public class ResourceSearchIn {
+public class ArticleSearchIn {
 }

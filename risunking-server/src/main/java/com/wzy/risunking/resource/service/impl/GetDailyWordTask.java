@@ -45,6 +45,7 @@ public class GetDailyWordTask implements Job {
             List<DailyWordInfo>insertList = new ArrayList<>(7);
             if (dataArray != null && dataArray.size()>0){
                 Collections.sort(dataArray, new Comparator<Object>(){
+                    @Override
                     public int compare(Object a , Object b)
                     {
                         JSONObject info1 = (JSONObject)a;

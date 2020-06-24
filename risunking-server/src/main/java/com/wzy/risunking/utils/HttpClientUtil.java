@@ -86,10 +86,11 @@ public class HttpClientUtil {
         StringBuffer param = new StringBuffer();
         int i = 0;
         for (String key : params.keySet()) {
-            if (i == 0)
+            if (i == 0) {
                 param.append("?");
-            else
+            } else {
                 param.append("&");
+            }
             param.append(key).append("=").append(params.get(key));
             i++;
         }
@@ -97,8 +98,7 @@ public class HttpClientUtil {
         String result = null;
         HttpClient httpClient;
         if (apiUrl.startsWith("https")) {
-            httpClient = HttpClients.custom().setSSLSocketFactory(createSSLConnSocketFactory())
-                    .setConnectionManager(connMgr).setDefaultRequestConfig(requestConfig).build();
+            httpClient = HttpClients.custom().setSSLSocketFactory(createSSLConnSocketFactory()).setConnectionManager(connMgr).setDefaultRequestConfig(requestConfig).build();
         } else {
             httpClient = HttpClients.createDefault();
         }
@@ -111,7 +111,7 @@ public class HttpClientUtil {
                 result = IOUtils.toString(instream, "UTF-8");
             }
         } catch (IOException e) {
-            logger.error("doGet报错："+e.getMessage()+"->"+e.getCause());
+            logger.error("doGet报错：" + e.getMessage() + "->" + e.getCause());
         }
         return JSON.parseObject(result);
     }
@@ -156,13 +156,13 @@ public class HttpClientUtil {
             HttpEntity entity = response.getEntity();
             httpStr = EntityUtils.toString(entity, "UTF-8");
         } catch (IOException e) {
-            logger.error("doPost（map）报错："+e.getCause()+"->"+e.getMessage());
+            logger.error("doPost（map）报错：" + e.getCause() + "->" + e.getMessage());
         } finally {
             if (response != null) {
                 try {
                     EntityUtils.consume(response.getEntity());
                 } catch (IOException e) {
-                    logger.error("EntityUtils.consume（map）报错："+e.getCause()+"->"+e.getMessage());
+                    logger.error("EntityUtils.consume（map）报错：" + e.getCause() + "->" + e.getMessage());
                 }
             }
         }
@@ -173,7 +173,7 @@ public class HttpClientUtil {
      * 发送 POST 请求，JSON形式
      *
      * @param apiUrl
-     * @param json json对象
+     * @param json   json对象
      * @return
      */
     public static JSONObject doPost(String apiUrl, JSONObject json) {
@@ -196,13 +196,13 @@ public class HttpClientUtil {
             HttpEntity entity = response.getEntity();
             httpStr = EntityUtils.toString(entity, "UTF-8");
         } catch (IOException e) {
-            logger.error("doPost(json)报错："+e.getCause()+"->"+e.getMessage());
+            logger.error("doPost(json)报错：" + e.getCause() + "->" + e.getMessage());
         } finally {
             if (response != null) {
                 try {
                     EntityUtils.consume(response.getEntity());
                 } catch (IOException e) {
-                    logger.error("EntityUtils.consume(json)报错："+e.getCause()+"->"+e.getMessage());
+                    logger.error("EntityUtils.consume(json)报错：" + e.getCause() + "->" + e.getMessage());
                 }
             }
         }
@@ -218,6 +218,7 @@ public class HttpClientUtil {
         SSLConnectionSocketFactory sslsf = null;
         try {
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                @Override
                 public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
                     return true;
                 }
@@ -229,26 +230,38 @@ public class HttpClientUtil {
                 }
             });
         } catch (GeneralSecurityException e) {
-            logger.error("createSSLConnSocketFactory报错："+e.getCause()+"->"+e.getMessage());
+            logger.error("createSSLConnSocketFactory报错：" + e.getCause() + "->" + e.getMessage());
         }
         return sslsf;
     }
 
+    /**
+     * phpGet 未使用连接池
+     *
+     * @param url
+     * @param param
+     * @return java.lang.String
+     * @author Wangzy
+     * @date 2020/6/24 17:21
+     */
     public static String sendPhpGet(String url, String param) {
         String result = "";
-        if (param == null) param = "";
-        if (param.equals("null")) param = "";
+        if (param == null) {
+            param = "";
+        }
+        if (param.equals("null")) {
+            param = "";
+        }
         BufferedReader in = null;
         try {
-            String urlNameString = url + ("".equals(param)?"":("?"+param));
+            String urlNameString = url + ("".equals(param) ? "" : ("?" + param));
             URL realUrl = new URL(urlNameString);
             // 打开和URL之间的连接
             URLConnection connection = realUrl.openConnection();
             // 设置通用的请求属性
             connection.setRequestProperty("accept", "*/*");
             connection.setRequestProperty("connection", "Keep-Alive");
-            connection.setRequestProperty("user-agent",
-                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            connection.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
             // 建立实际的连接
             connection.connect();
             // 获取所有响应头字段
@@ -258,8 +271,7 @@ public class HttpClientUtil {
                 System.out.println(key + "--->" + map.get(key));
             }
             // 定义 BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(new InputStreamReader(
-                    connection.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line;
             while ((line = in.readLine()) != null) {
                 result += line;
@@ -281,6 +293,15 @@ public class HttpClientUtil {
         return result;
     }
 
+    /**
+     * phpPost 未使用连接池
+     *
+     * @param url
+     * @param param
+     * @return java.lang.String
+     * @author Wangzy
+     * @date 2020/6/24 17:21
+     */
     public static String sendPhpPost(String url, String param) {
         PrintWriter out = null;
         BufferedReader in = null;
@@ -292,8 +313,7 @@ public class HttpClientUtil {
             // 设置通用的请求属性
             conn.setRequestProperty("accept", "*/*");
             conn.setRequestProperty("connection", "Keep-Alive");
-            conn.setRequestProperty("user-agent",
-                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            conn.setRequestProperty("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
             // 发送POST请求必须设置如下两行
             conn.setDoOutput(true);
             conn.setDoInput(true);
@@ -304,27 +324,25 @@ public class HttpClientUtil {
             // flush输出流的缓冲
             out.flush();
             // 定义BufferedReader输入流来读取URL的响应
-            in = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream()));
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
             while ((line = in.readLine()) != null) {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！"+e);
+            System.out.println("发送 POST 请求出现异常！" + e);
             e.printStackTrace();
         }
         //使用finally块来关闭输出流、输入流
-        finally{
-            try{
-                if(out!=null){
+        finally {
+            try {
+                if (out != null) {
                     out.close();
                 }
-                if(in!=null){
+                if (in != null) {
                     in.close();
                 }
-            }
-            catch(IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }

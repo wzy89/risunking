@@ -58,7 +58,7 @@ public class FileUpDownLoadService {
         try {
             fileInputStream = new FileInputStream(file);
             is = new BufferedInputStream(fileInputStream);
-            byte[] buffer = new byte[4 * 1024]; //4k Buffer
+            byte[] buffer = new byte[4 * 1024];
             int read = 0;
             while ((read = is.read(buffer)) != -1) {
                 bos.write(buffer, 0, read);
