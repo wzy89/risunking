@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzy.risunking.resource.dao.ResourceDao">
+
+    <select id="getResourceList" parameterType="com.wzy.risunking.resource.entity.ResourceSearchIn">
+    </select>
+
+    <insert id="insertResource" parameterType="com.wzy.risunking.resource.entity.ResourceInfo">
+    </insert>
+
+    <update id="updateResource" parameterType="com.wzy.risunking.resource.entity.ResourceInfo" >
+    </update>
+
+    <delete id="deleteResource" parameterType="com.wzy.risunking.resource.entity.ResourceInfo">
+    </delete>
+
+</mapper>

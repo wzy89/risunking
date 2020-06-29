@@ -1,6 +1,6 @@
 # risunking-web
 
-> risunking web app
+> A Vue.js project
 
 ## Build Setup
 
