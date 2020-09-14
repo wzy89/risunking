@@ -20,7 +20,7 @@ HELP.md
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
+/build/
 
 # misc
 .DS_Store
@@ -46,3 +46,7 @@ setupProxy.js
 *.iws
 *.iml
 *.ipr
+
+### maven ###
+mvnw
+mvnw.cmd
