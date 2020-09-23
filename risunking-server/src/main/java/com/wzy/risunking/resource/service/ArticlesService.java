@@ -42,6 +42,16 @@ public interface ArticlesService {
     int articleUpdate(ArticleInfo articleInfo);
 
     /**
+     * 更新文章已读数量
+     *
+     * @param articleInfo
+     * @return int
+     * @author Wangzy
+     * @date 2020/9/18 23:19
+     */
+    int articleUpdateReadNum(ArticleInfo articleInfo);
+
+    /**
      * 文章删除
      *
      * @param articleInfo
@@ -50,4 +60,14 @@ public interface ArticlesService {
      * @date 2020/6/24 17:43
      */
     int articleDelete(ArticleInfo articleInfo);
+
+    /**
+     * 获取文章content
+     *
+     * @param articleInfo
+     * @return java.lang.String
+     * @author Wangzy
+     * @date 2020/9/23 11:30
+     */
+    ArticleInfo articleContent(ArticleInfo articleInfo);
 }

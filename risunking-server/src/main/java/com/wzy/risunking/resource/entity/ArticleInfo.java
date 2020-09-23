@@ -13,6 +13,7 @@ public class ArticleInfo {
     private String content;
     private String path;
     private String url;
+    private String desc;
     private String tagCodes;
     private String tags;
     private String readNum;
@@ -88,5 +89,13 @@ public class ArticleInfo {
 
     public void setTagCodes(String tagCodes) {
         this.tagCodes = tagCodes;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

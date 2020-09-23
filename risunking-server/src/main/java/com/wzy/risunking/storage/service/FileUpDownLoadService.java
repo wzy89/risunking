@@ -3,12 +3,12 @@ package com.wzy.risunking.storage.service;
 import com.wzy.risunking.global.config.Config;
 import com.wzy.risunking.global.entity.CommandException;
 import com.wzy.risunking.global.entity.Response;
+import com.wzy.risunking.utils.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +36,8 @@ public class FileUpDownLoadService {
         String fileSavePath = Config.getFileDirWithFileName(fileName);
         File file = new File(fileSavePath + fileName);
         if (!file.exists()) {
-            logger.error("文件路径："+fileSavePath + fileName);
-            throw new CommandException(Response.PARAM_ERROR,"文件不存在！");
+            logger.error("文件路径：" + fileSavePath + fileName);
+            throw new CommandException(Response.PARAM_ERROR, "文件不存在！");
         }
         resp.setContentType("application/octet-stream");
         resp.setHeader("Content-Disposition", "attachment; filename=" + fileName);
@@ -48,9 +48,9 @@ public class FileUpDownLoadService {
         }
         ServletOutputStream os;
         try {
-            os= resp.getOutputStream();
-        }catch (IOException e){
-            throw new CommandException(Response.INNER_ERROR,"获取输出流失败！");
+            os = resp.getOutputStream();
+        } catch (IOException e) {
+            throw new CommandException(Response.INNER_ERROR, "获取输出流失败！");
         }
         BufferedOutputStream bos = new BufferedOutputStream(os);
         InputStream is = null;
@@ -93,13 +93,13 @@ public class FileUpDownLoadService {
     public void saveUploadFile(HttpServletRequest req, HttpServletResponse resp) throws CommandException {
         try {
             req.setCharacterEncoding("UTF-8");
-        }catch (IOException e){
+        } catch (IOException e) {
             logger.error("上传：UTF-8编码失败，可能出现乱码！");
         }
         String saveFileName = UUID.randomUUID().toString();
         String saveFilePath = Config.getFileDirWithFileName(saveFileName);
         resp.setCharacterEncoding("UTF-8");
-        resp.setHeader("Access-Control-Allow-Origin","*");
+        resp.setHeader("Access-Control-Allow-Origin", "*");
         String result = "";
         try {
             StandardMultipartHttpServletRequest request = (StandardMultipartHttpServletRequest) req;
@@ -107,8 +107,8 @@ public class FileUpDownLoadService {
             while (itr.hasNext()) {
                 MultipartFile mfile = request.getFile(itr.next());
                 String name = mfile.getOriginalFilename();
-                name = saveFileName + getExtensionName(name);
-                result =result + name + ",";
+                name = saveFileName + CommonUtils.getDotExtensionName(name);
+                result = result + name + ",";
                 File f = new File(saveFilePath + name);
                 mfile.transferTo(f);
             }
@@ -118,10 +118,10 @@ public class FileUpDownLoadService {
         }
         try {
             PrintWriter printWriter = resp.getWriter();
-            printWriter.write(result.length()==0?result:result.substring(0,result.length()-1));
+            printWriter.write(result.length() == 0 ? result : result.substring(0, result.length() - 1));
             printWriter.flush();
             printWriter.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             logger.error("文件上传成功，但输出返回值失败~");
         }
@@ -162,22 +162,6 @@ public class FileUpDownLoadService {
         } catch (IOException e) {
             logger.error("文件保存失败~");
             e.printStackTrace();
-        }
-        return "";
-    }
-
-    /**
-     * 根据文件名获取文件类型后缀
-     *
-     * @param filename
-     * @return
-     */
-    private String getExtensionName(String filename) {
-        if (filename != null && filename.length() > 0) {
-            int dot = filename.lastIndexOf(46);
-            if (dot > -1 && dot < filename.length() - 1) {
-                return "." + filename.substring(dot + 1).toLowerCase();
-            }
         }
         return "";
     }

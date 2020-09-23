@@ -12,13 +12,15 @@ public final class Response<T> {
     public static final int SUCCESS_RESULT = 0;
     public static final String SUCCESS_RESULT_MSG = "成功";
 
+    /** 查询为空 */
     public static final int EMPTY_RESULT = 1;
     public static final String EMPTY_RESULT_MSG = "查询为空";
 
-    public static final int PARAM_ERROR = -1;           //参数错误
-    public static final int INNER_ERROR = -2;           //内部代码错误
-    public static final int UNAUTHORIZED_ACCESS = -3;   //未授权进入
-    public static final int RESTRICTING_ACCESS = -4;    //次数超限
+    /** 参数错误 */
+    public static final int PARAM_ERROR = -1;
+
+    /** 内部代码错误 */
+    public static final int INNER_ERROR = -2;
 
     /** 方法名 -- 方法报错时返回， -- other中固定参数 */
     public static final String ERRORSTACKTRACE = "errorStackTrace";
@@ -74,7 +76,7 @@ public final class Response<T> {
     public String toString() {
         return "{" +
                 "code=" + code +
-                ", msg='" + msg +
+                ", msg=" + msg +
                 ", result=" + result.toString() +
                 ", other=" + other + "}";
     }

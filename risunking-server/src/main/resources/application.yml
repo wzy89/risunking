@@ -8,6 +8,8 @@ spring:
       - classpath:risunking.sql
     initialization-mode: always
     continue-on-error: false
+  jackson:
+    default-property-inclusion: non_null
 server:
   port: 8899
 logging:
