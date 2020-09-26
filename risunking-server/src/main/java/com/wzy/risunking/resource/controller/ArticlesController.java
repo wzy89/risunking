@@ -52,7 +52,7 @@ public class ArticlesController {
      * @date 2020/6/24 17:42
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    Integer articleAdd(ArticleInfo articleInfo) {
+    public Integer articleAdd(@RequestBody ArticleInfo articleInfo) {
         String title = articleInfo.getTitle();
         String desc = articleInfo.getDesc();
         if (DataCheck.containsEmptyString(title, desc)) {
@@ -70,7 +70,7 @@ public class ArticlesController {
      * @date 2020/6/24 17:42
      */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    Integer articleUpdate(ArticleInfo articleInfo) {
+    public Integer articleUpdate(@RequestBody ArticleInfo articleInfo) {
         String articleId = articleInfo.getId();
         if (DataCheck.isEmptyString(articleId)) {
             throw new CommandException(1, "参数错误");
@@ -87,7 +87,7 @@ public class ArticlesController {
      * @date 2020/6/24 17:42
      */
     @RequestMapping(value = "/addReadNum", method = RequestMethod.POST)
-    Integer articleUpdateReadNum(ArticleInfo articleInfo) {
+    public Integer articleUpdateReadNum(@RequestBody ArticleInfo articleInfo) {
         String articleId = articleInfo.getId();
         if (DataCheck.isEmptyString(articleId)) {
             throw new CommandException(1, "参数错误");
@@ -104,7 +104,7 @@ public class ArticlesController {
      * @date 2020/6/24 17:43
      */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    Integer articleDelete(ArticleInfo articleInfo) {
+    public Integer articleDelete(@RequestBody ArticleInfo articleInfo) {
         String articleId = articleInfo.getId();
         if (DataCheck.isEmptyString(articleId)) {
             throw new CommandException(1, "参数错误");
@@ -120,7 +120,8 @@ public class ArticlesController {
      * @author Wangzy
      * @date 2020/9/23 11:30
      */
-    ArticleInfo articleContent(ArticleInfo articleInfo) {
+    @RequestMapping(value = "/detail", method = RequestMethod.POST)
+    public ArticleInfo articleContent(@RequestBody ArticleInfo articleInfo) {
         return articlesService.articleContent(articleInfo);
     }
 }

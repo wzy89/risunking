@@ -137,6 +137,40 @@ public class ArticlesServiceImpl implements ArticlesService {
             List<String> tagCodeList = Arrays.asList(tagCodes.split(","));
             articlesDao.articleToResourceAdd(articleInfo.getId(), tagCodeList);
         }
+        // 更新文章内容或者保存文章文件
+        String fileName = articleInfo.getPath();
+        String content = articleInfo.getContent();
+        if (!DataCheck.isEmptyString(fileName)) {
+            String saveFilePath = Config.getFileDirWithFileName(fileName);
+            String filePath = saveFilePath + fileName;
+            File file = new File(filePath);
+            if (!DataCheck.isEmptyString(content)) {
+                articleInfo.setUrl("");
+                if (file.exists()) {
+                    CommonUtils.writeStringToFile(filePath, content, false);
+                } else {
+                    logger.error("文件路径：" + filePath);
+                    throw new CommandException(Response.PARAM_ERROR, "文件不存在！");
+                }
+            } else {
+                articleInfo.setPath("");
+                if (file.exists()) {
+                    file.delete();
+                }
+            }
+        } else if (!DataCheck.isEmptyString(content)) {
+            String saveFileName = UUID.randomUUID().toString();
+            String saveFilePath = Config.getFileDirWithFileName(saveFileName);
+            String filePath = saveFilePath + saveFileName + articleFileExtension;
+            boolean success = CommonUtils.writeStringToFile(filePath, content);
+            if (success) {
+                articleInfo.setPath(saveFileName + articleFileExtension);
+            } else {
+                throw new CommandException(Response.INNER_ERROR, "保存文件失败");
+            }
+            articleInfo.setUrl("");
+            articleInfo.setPath(saveFileName + articleFileExtension);
+        }
         return articlesDao.articleUpdate(articleInfo);
     }
 
@@ -163,6 +197,16 @@ public class ArticlesServiceImpl implements ArticlesService {
      */
     @Override
     public int articleDelete(ArticleInfo articleInfo) {
+        // 删除文章文件
+        String fileName = articleInfo.getPath();
+        if (!DataCheck.isEmptyString(fileName)) {
+            String saveFilePath = Config.getFileDirWithFileName(fileName);
+            String filePath = saveFilePath + fileName;
+            File file = new File(filePath);
+            if (file.exists()) {
+                file.delete();
+            }
+        }
         // 删除tag与文章关系
         articlesDao.articleToResourceDelete(articleInfo);
         // 删除文章
@@ -187,7 +231,7 @@ public class ArticlesServiceImpl implements ArticlesService {
                 logger.error("文件路径：" + fileSavePath + fileName);
                 throw new CommandException(Response.PARAM_ERROR, "文件不存在！");
             }
-            String content = CommonUtils.readStringFromFile(fileSavePath);
+            String content = CommonUtils.readStringFromFile(fileSavePath + fileName);
             articleInfo.setContent(content);
         }
         return articleInfo;

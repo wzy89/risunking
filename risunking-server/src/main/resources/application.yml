@@ -11,7 +11,7 @@ spring:
   jackson:
     default-property-inclusion: non_null
 server:
-  port: 8899
+  port: 9999
 logging:
   config:
     - classpath:logback-boot.xml

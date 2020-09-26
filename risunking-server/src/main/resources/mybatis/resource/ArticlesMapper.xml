@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wzy.risunking.resource.dao.ArticlesDao">
 
-    <select id="articleList" resultType="com.wzy.risunking.resource.entity.ArticleSearchIn">
+    <select id="articleList" parameterType="com.wzy.risunking.resource.entity.ArticleSearchIn" resultType="com.wzy.risunking.resource.entity.ArticleInfo">
         SELECT * FROM (SELECT a.resource_id id,a.resource_desc 'desc',a.resource_href url,a.resource_name title,
         a.resource_path path,a.resource_owner author,a.expand readNum,GROUP_CONCAT(c.tag_name) tags,
         GROUP_CONCAT(c.tag_code) tagCodes FROM risunking.resource a
@@ -37,13 +37,13 @@
         <if test='articleInfo.title != null and articleInfo.title != ""'>
             , `resource_name` = #{articleInfo.title}
         </if>
-        <if test='articleInfo.path != null and articleInfo.path != ""'>
+        <if test='articleInfo.path != null'>
             , `resource_path` = #{articleInfo.path}
         </if>
-        <if test='articleInfo.url != null and articleInfo.url != ""'>
+        <if test='articleInfo.url != null'>
             , `resource_href` = #{articleInfo.url}
         </if>
-        <if test='articleInfo.title != null and articleInfo.title != ""'>
+        <if test='articleInfo.desc != null and articleInfo.desc != ""'>
             , `resource_desc` = #{articleInfo.desc}
         </if>
         WHERE `resource_id` = #{articleInfo.id}
