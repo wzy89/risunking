@@ -8,7 +8,6 @@ import com.wzy.risunking.resource.service.ArticlesService;
 import com.wzy.risunking.utils.DataCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 /**
@@ -23,7 +22,7 @@ import java.util.List;
 public class ArticlesController {
 
     @Autowired
-    ArticlesService articlesService;
+    private ArticlesService articlesService;
 
     /**
      * 查询文章列表

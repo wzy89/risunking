@@ -6,16 +6,12 @@ package com.wzy.risunking.resource.entity;
  * @author Wangzy
  * @date 2020/4/23 17:21
  */
-public class ArticleSearchIn {
+public class ArticleSearchIn extends BaseInfo {
     private String title;
     private String author;
     private String tag;
-    private String page;
-    private String size;
     private String startDate;
     private String endDate;
-    private int from = 0;
-    private int to = 100;
 
     public String getTitle() {
         return title;
@@ -41,22 +37,6 @@ public class ArticleSearchIn {
         this.tag = tag;
     }
 
-    public String getPage() {
-        return page;
-    }
-
-    public void setPage(String page) {
-        this.page = page;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
-    }
-
     public String getStartDate() {
         return startDate;
     }
@@ -71,21 +51,5 @@ public class ArticleSearchIn {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
-    }
-
-    public int getFrom() {
-        return from;
-    }
-
-    public void setFrom(int from) {
-        this.from = from;
-    }
-
-    public int getTo() {
-        return to;
-    }
-
-    public void setTo(int to) {
-        this.to = to;
     }
 }

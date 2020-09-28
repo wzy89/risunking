@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wzy.risunking.resource.dao.GuestsDao">
+
+    <select id="guestList" parameterType="com.wzy.risunking.resource.entity.BaseInfo" resultType="com.wzy.risunking.resource.entity.GuestInfo">
+        SELECT id,expand,content,nick_name AS nickName,email,pid FROM risunking.guests ORDER BY create_date
+        LIMIT #{searchInfo.from},#{searchInfo.to}
+    </select>
+
+    <insert id="insertGuest" parameterType="com.wzy.risunking.resource.entity.GuestInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO risunking.guests (`expand`, `content`, `nick_name`, `email`, `pid`) VALUES
+        (#{guestInfo.expand}, #{guestInfo.content}, #{guestInfo.nickName}, #{guestInfo.email}, #{guestInfo.pid})
+    </insert>
+
+</mapper>
