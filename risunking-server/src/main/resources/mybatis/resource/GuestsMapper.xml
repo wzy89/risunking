@@ -3,13 +3,13 @@
 <mapper namespace="com.wzy.risunking.resource.dao.GuestsDao">
 
     <select id="guestList" parameterType="com.wzy.risunking.resource.entity.BaseInfo" resultType="com.wzy.risunking.resource.entity.GuestInfo">
-        SELECT id,expand,content,nick_name AS nickName,email,pid FROM risunking.guests ORDER BY create_date
+        SELECT id,content,nick_name AS nickName,email,pid,expand FROM risunking.guests where pid=0 ORDER BY create_date
         LIMIT #{searchInfo.from},#{searchInfo.to}
     </select>
 
     <insert id="insertGuest" parameterType="com.wzy.risunking.resource.entity.GuestInfo" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO risunking.guests (`expand`, `content`, `nick_name`, `email`, `pid`) VALUES
-        (#{guestInfo.expand}, #{guestInfo.content}, #{guestInfo.nickName}, #{guestInfo.email}, #{guestInfo.pid})
+        INSERT INTO risunking.guests (`content`, `nick_name`, `email`, `pid`,`expand`) VALUES
+        (#{guestInfo.content}, #{guestInfo.nickName}, #{guestInfo.email}, #{guestInfo.pid}, #{guestInfo.expand})
     </insert>
 
 </mapper>
