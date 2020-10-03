@@ -3,7 +3,7 @@
 <mapper namespace="com.wzy.risunking.resource.dao.GuestsDao">
 
     <select id="guestList" parameterType="com.wzy.risunking.resource.entity.BaseInfo" resultType="com.wzy.risunking.resource.entity.GuestInfo">
-        SELECT id,content,nick_name AS nickName,email,pid,expand FROM risunking.guests where pid=0 ORDER BY create_date
+        SELECT id,content,nick_name AS nickName,email,pid,expand FROM risunking.guests where pid=0 and public=1 ORDER BY create_date
         LIMIT #{searchInfo.from},#{searchInfo.to}
     </select>
 
