@@ -41,7 +41,7 @@ public class InitializerService implements CommandLineRunner {
      * @Update Wangzy 2018/12/19 17:35
      */
     @Override
-    public void run(String... strings) throws Exception {
+    public void run(String... strings) {
 
         //开启自动清理僵尸用户的定时任务
         String autoCleanCorpseTaskName = "AutoCleanCorpseTask";

@@ -64,6 +64,24 @@ public class ArticlesServiceImpl implements ArticlesService {
         return articlesDao.articleList(articleSearchIn);
     }
 
+    @Override
+    public int articleListCount(ArticleSearchIn articleSearchIn) {
+        String title = articleSearchIn.getTitle();
+        if (!DataCheck.isEmptyString(title)) {
+            articleSearchIn.setTitle("%" + title + "%");
+        }
+        String startDate = articleSearchIn.getStartDate();
+        String endDate = articleSearchIn.getEndDate();
+        if (!DataCheck.isEmptyString(startDate) && !DataCheck.isEmptyString(endDate)) {
+            articleSearchIn.setStartDate(startDate + " 00:00:00");
+            articleSearchIn.setEndDate(endDate + " 23:59:59");
+        } else {
+            articleSearchIn.setEndDate("");
+            articleSearchIn.setStartDate("");
+        }
+        return articlesDao.articleListCount(articleSearchIn);
+    }
+
     /**
      * 添加文章
      *

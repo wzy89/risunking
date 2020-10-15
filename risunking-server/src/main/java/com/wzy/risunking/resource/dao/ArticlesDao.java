@@ -22,6 +22,7 @@ public interface ArticlesDao {
      * @date 2020/6/24 17:33
      */
     List<ArticleInfo> articleList(@Param("articleSearchIn") ArticleSearchIn articleSearchIn);
+    int articleListCount(@Param("articleSearchIn") ArticleSearchIn articleSearchIn);
 
     /**
      * 添加文章

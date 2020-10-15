@@ -25,6 +25,26 @@
         LIMIT #{articleSearchIn.from},#{articleSearchIn.size}
     </select>
 
+    <select id="articleListCount" parameterType="com.wzy.risunking.resource.entity.ArticleSearchIn" resultType="java.lang.Integer">
+        SELECT count(*) FROM (SELECT a.resource_id FROM risunking.resource a
+        LEFT JOIN risunking.resource_to_tags b ON b.resource_id=a.resource_id
+        LEFT JOIN risunking.tags c ON c.tag_code = b.tag_code WHERE 1=1
+        <if test='articleSearchIn.startDate != null and articleSearchIn.startDate != ""'>
+            AND a.create_date BETWEEN #{articleSearchIn.startDate} AND #{articleSearchIn.endDate}
+        </if>
+        <if test='articleSearchIn.title != null and articleSearchIn.title != ""'>
+            AND a.resource_name LIKE #{articleSearchIn.title}
+        </if>
+        <if test='articleSearchIn.author != null and articleSearchIn.author != ""'>
+            AND a.resource_owner = #{articleSearchIn.author}
+        </if>
+        GROUP BY a.resource_id
+        ORDER BY a.update_date) d WHERE 1=1
+        <if test='articleSearchIn.tag != null and articleSearchIn.tag != ""'>
+            AND FIND_IN_SET(#{articleSearchIn.tag},d.tagCodes)>0
+        </if>
+    </select>
+
     <insert id="articleAdd" parameterType="com.wzy.risunking.resource.entity.ArticleInfo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO risunking.resource
         (`resource_name`, `resource_type`, `resource_path`, `resource_href`, `resource_owner`, `resource_desc`, `expand`)

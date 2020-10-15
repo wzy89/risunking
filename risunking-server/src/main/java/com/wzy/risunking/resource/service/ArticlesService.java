@@ -20,6 +20,7 @@ public interface ArticlesService {
      * @date 2020/6/24 17:33
      */
     List<ArticleInfo> articleList(ArticleSearchIn articleSearchIn);
+    int articleListCount(ArticleSearchIn articleSearchIn);
 
     /**
      * 添加文章

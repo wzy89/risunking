@@ -33,8 +33,10 @@ public class ArticlesController {
      * @date 2020/6/24 17:45
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public List<ArticleInfo> articleList(@RequestBody ArticleSearchIn articleSearchIn) {
-        return articlesService.articleList(articleSearchIn);
+    public Response<List<ArticleInfo>> articleList(@RequestBody ArticleSearchIn articleSearchIn) {
+        List<ArticleInfo> data = articlesService.articleList(articleSearchIn);
+        int count = articlesService.articleListCount(articleSearchIn);
+        return new Response<>(Response.SUCCESS_RESULT, Response.SUCCESS_RESULT_MSG, data, count);
     }
 
     /**
