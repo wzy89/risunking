@@ -13,6 +13,7 @@ public class GuestInfo {
     private String content;
     private String nickName;
     private String email;
+    private String createDate;
     private String pid;
 
     public String getId() {
@@ -61,5 +62,13 @@ public class GuestInfo {
 
     public void setPid(String pid) {
         this.pid = pid;
+    }
+
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate.contains(".0")?createDate.substring(0,createDate.length()-2):createDate;
     }
 }

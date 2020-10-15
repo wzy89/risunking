@@ -24,7 +24,7 @@ public interface GuestsDao {
      * @date 2020/4/23 17:56
      */
     List<GuestInfo> guestList(@Param("searchInfo") BaseInfo searchInfo);
-
+    int guestListCount(@Param("searchInfo") BaseInfo searchInfo);
     /**
      * 插入留言数据
      *

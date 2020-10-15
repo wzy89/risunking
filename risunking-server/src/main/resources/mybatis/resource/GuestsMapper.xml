@@ -3,9 +3,14 @@
 <mapper namespace="com.wzy.risunking.resource.dao.GuestsDao">
 
     <select id="guestList" parameterType="com.wzy.risunking.resource.entity.BaseInfo" resultType="com.wzy.risunking.resource.entity.GuestInfo">
-        SELECT id,content,nick_name AS nickName,email,pid,expand FROM risunking.guests where pid=0 and public=1 ORDER BY create_date
-        LIMIT #{searchInfo.from},#{searchInfo.to}
+        SELECT id,content,nick_name AS nickName,email,pid,expand,create_date AS createDate FROM risunking.guests where pid=0 and public=1 ORDER BY create_date
+        LIMIT #{searchInfo.from},#{searchInfo.size}
     </select>
+
+    <select id="guestListCount" parameterType="com.wzy.risunking.resource.entity.BaseInfo" resultType="java.lang.Integer">
+        SELECT count(1) FROM risunking.guests where pid=0 and public=1 ORDER BY create_date
+    </select>
+
 
     <insert id="insertGuest" parameterType="com.wzy.risunking.resource.entity.GuestInfo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO risunking.guests (`content`, `nick_name`, `email`, `pid`,`expand`) VALUES

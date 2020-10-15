@@ -34,11 +34,6 @@ public class ArticlesController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public List<ArticleInfo> articleList(@RequestBody ArticleSearchIn articleSearchIn) {
-        String page = articleSearchIn.getPage();
-        String size = articleSearchIn.getSize();
-        if (DataCheck.containsEmptyString(page, size)) {
-            throw new CommandException(Response.PARAM_ERROR, "参数错误");
-        }
         return articlesService.articleList(articleSearchIn);
     }
 

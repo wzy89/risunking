@@ -1,5 +1,8 @@
 package com.wzy.risunking.resource.entity;
 
+import com.wzy.risunking.global.entity.CommandException;
+import com.wzy.risunking.global.entity.Response;
+
 /**
  * BaseInfo
  *
@@ -8,10 +11,9 @@ package com.wzy.risunking.resource.entity;
  */
 public class BaseInfo {
     public String id;
-    public String page;
-    public String size;
+    public int page = 0;
+    public int size = 0;
     public int from = 0;
-    public int to = 100;
 
     public int getFrom() {
         return from;
@@ -19,14 +21,6 @@ public class BaseInfo {
 
     public void setFrom(int from) {
         this.from = from;
-    }
-
-    public int getTo() {
-        return to;
-    }
-
-    public void setTo(int to) {
-        this.to = to;
     }
 
     public String getId() {
@@ -37,19 +31,27 @@ public class BaseInfo {
         this.id = id;
     }
 
-    public String getPage() {
+    public int getPage() {
         return page;
     }
 
-    public void setPage(String page) {
+    public void setPage(int page) {
         this.page = page;
     }
 
-    public String getSize() {
+    public int getSize() {
         return size;
     }
 
-    public void setSize(String size) {
+    public void setSize(int size) {
         this.size = size;
+    }
+
+    public void initFrom(){
+        if (this.page <= 0 || this.size <= 0) {
+            throw new CommandException(Response.PARAM_ERROR, "page或size参数错误");
+        }
+        int from = (page - 1) * size;
+        setFrom(from);
     }
 }

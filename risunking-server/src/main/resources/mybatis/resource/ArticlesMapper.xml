@@ -22,7 +22,7 @@
         <if test='articleSearchIn.tag != null and articleSearchIn.tag != ""'>
             AND FIND_IN_SET(#{articleSearchIn.tag},d.tagCodes)>0
         </if>
-        LIMIT #{articleSearchIn.from},#{articleSearchIn.to}
+        LIMIT #{articleSearchIn.from},#{articleSearchIn.size}
     </select>
 
     <insert id="articleAdd" parameterType="com.wzy.risunking.resource.entity.ArticleInfo" useGeneratedKeys="true" keyProperty="id">

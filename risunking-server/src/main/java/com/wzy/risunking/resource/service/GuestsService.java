@@ -2,7 +2,6 @@ package com.wzy.risunking.resource.service;
 
 import com.wzy.risunking.resource.entity.BaseInfo;
 import com.wzy.risunking.resource.entity.GuestInfo;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -20,6 +19,7 @@ public interface GuestsService {
      * @date 2020/4/23 17:56
      */
     List<GuestInfo> guestList(BaseInfo searchInfo);
+    int guestListCount(BaseInfo searchInfo);
 
     /**
      * 留言插入

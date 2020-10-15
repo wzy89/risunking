@@ -60,19 +60,7 @@ public class ArticlesServiceImpl implements ArticlesService {
             articleSearchIn.setEndDate("");
             articleSearchIn.setStartDate("");
         }
-        String page = articleSearchIn.getPage();
-        String size = articleSearchIn.getSize();
-        if (!DataCheck.isEmptyString(page) && !DataCheck.isEmptyString(size)) {
-            int ipage = Integer.valueOf(page);
-            int isize = Integer.valueOf(size);
-            if (ipage <= 0 || isize <= 0) {
-                throw new CommandException(Response.PARAM_ERROR, "page或size参数错误");
-            }
-            int from = (ipage - 1) * isize;
-            int to = from + isize;
-            articleSearchIn.setFrom(from);
-            articleSearchIn.setTo(to);
-        }
+        articleSearchIn.initFrom();
         return articlesDao.articleList(articleSearchIn);
     }
 

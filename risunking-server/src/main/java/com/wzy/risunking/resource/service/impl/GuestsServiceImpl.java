@@ -33,20 +33,13 @@ public class GuestsServiceImpl implements GuestsService {
      */
     @Override
     public List<GuestInfo> guestList(BaseInfo searchInfo) {
-        String page = searchInfo.getPage();
-        String size = searchInfo.getSize();
-        if (!DataCheck.isEmptyString(page) && !DataCheck.isEmptyString(size)) {
-            int ipage = Integer.valueOf(page);
-            int isize = Integer.valueOf(size);
-            if (ipage <= 0 || isize <= 0) {
-                throw new CommandException(Response.PARAM_ERROR, "page或size参数错误");
-            }
-            int from = (ipage - 1) * isize;
-            int to = from + isize;
-            searchInfo.setFrom(from);
-            searchInfo.setTo(to);
-        }
+        searchInfo.initFrom();
         return guestsDao.guestList(searchInfo);
+    }
+
+    @Override
+    public int guestListCount(BaseInfo searchInfo) {
+        return guestsDao.guestListCount(searchInfo);
     }
 
     /**

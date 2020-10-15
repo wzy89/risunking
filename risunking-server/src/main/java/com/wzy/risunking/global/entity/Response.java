@@ -28,15 +28,17 @@ public final class Response<T> {
     private int code = SUCCESS_RESULT;
     private String msg = SUCCESS_RESULT_MSG;
     private T result;
+    private int count = 0;
     private Map<String, String> other = new HashMap<>();
 
     public Response() {
     }
 
-    public Response(int code, String msg, T result) {
+    public Response(int code, String msg, T result, int count) {
         this.code = code;
         this.result = result;
         this.msg = msg;
+        this.count = count;
     }
 
     public void setOther(String key, String value) {
@@ -71,6 +73,13 @@ public final class Response<T> {
         this.result = result;
     }
 
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     @Override
     public String toString() {
