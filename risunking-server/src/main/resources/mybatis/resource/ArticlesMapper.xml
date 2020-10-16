@@ -3,11 +3,14 @@
 <mapper namespace="com.wzy.risunking.resource.dao.ArticlesDao">
 
     <select id="articleList" parameterType="com.wzy.risunking.resource.entity.ArticleSearchIn" resultType="com.wzy.risunking.resource.entity.ArticleInfo">
-        SELECT * FROM (SELECT a.resource_id id,a.resource_desc 'desc',a.resource_href url,a.resource_name title,
+        SELECT * FROM (SELECT a.resource_cover as cover,a.resource_id id,a.resource_desc 'desc',a.resource_href url,a.resource_name title,
         a.resource_path path,a.resource_owner author,a.expand readNum,GROUP_CONCAT(c.tag_name) tags,
         GROUP_CONCAT(c.tag_code) tagCodes FROM risunking.resource a
         LEFT JOIN risunking.resource_to_tags b ON b.resource_id=a.resource_id
         LEFT JOIN risunking.tags c ON c.tag_code = b.tag_code WHERE 1=1
+        <if test='articleSearchIn.type != null and articleSearchIn.type != ""'>
+            AND a.resource_type = #{articleSearchIn.type}
+        </if>
         <if test='articleSearchIn.startDate != null and articleSearchIn.startDate != ""'>
             AND a.create_date BETWEEN #{articleSearchIn.startDate} AND #{articleSearchIn.endDate}
         </if>
@@ -25,10 +28,22 @@
         LIMIT #{articleSearchIn.from},#{articleSearchIn.size}
     </select>
 
+    <select id="articleDetail" parameterType="com.wzy.risunking.resource.entity.ArticleInfo" resultType="com.wzy.risunking.resource.entity.ArticleInfo">
+        SELECT a.resource_cover as cover,a.resource_id id,a.resource_desc 'desc',a.resource_href url,a.resource_name title,
+        a.resource_path path,a.resource_owner author,a.expand readNum,GROUP_CONCAT(c.tag_name) tags,
+        GROUP_CONCAT(c.tag_code) tagCodes FROM risunking.resource a
+        LEFT JOIN risunking.resource_to_tags b ON b.resource_id=a.resource_id
+        LEFT JOIN risunking.tags c ON c.tag_code = b.tag_code WHERE a.resource_id=#{articleInfo.id}
+        GROUP BY a.resource_id
+    </select>
+
     <select id="articleListCount" parameterType="com.wzy.risunking.resource.entity.ArticleSearchIn" resultType="java.lang.Integer">
         SELECT count(*) FROM (SELECT a.resource_id FROM risunking.resource a
         LEFT JOIN risunking.resource_to_tags b ON b.resource_id=a.resource_id
         LEFT JOIN risunking.tags c ON c.tag_code = b.tag_code WHERE 1=1
+        <if test='articleSearchIn.type != null and articleSearchIn.type != ""'>
+            AND a.resource_type = #{articleSearchIn.type}
+        </if>
         <if test='articleSearchIn.startDate != null and articleSearchIn.startDate != ""'>
             AND a.create_date BETWEEN #{articleSearchIn.startDate} AND #{articleSearchIn.endDate}
         </if>
@@ -47,9 +62,9 @@
 
     <insert id="articleAdd" parameterType="com.wzy.risunking.resource.entity.ArticleInfo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO risunking.resource
-        (`resource_name`, `resource_type`, `resource_path`, `resource_href`, `resource_owner`, `resource_desc`, `expand`)
+        (`resource_name`,`resource_cover`, `resource_type`, `resource_path`, `resource_href`, `resource_owner`, `resource_desc`, `expand`)
         VALUES
-        (#{articleInfo.title}, '00', #{articleInfo.path}, #{articleInfo.url}, 1, #{articleInfo.desc}, '0')
+        (#{articleInfo.title}, #{articleInfo.cover} ,#{articleInfo.type}, #{articleInfo.path}, #{articleInfo.url}, 1, #{articleInfo.desc}, '0')
     </insert>
 
     <update id="articleUpdate" parameterType="com.wzy.risunking.resource.entity.ArticleInfo">
@@ -62,6 +77,9 @@
         </if>
         <if test='articleInfo.url != null'>
             , `resource_href` = #{articleInfo.url}
+        </if>
+        <if test='articleInfo.cover != null'>
+            , `resource_cover` = #{articleInfo.cover}
         </if>
         <if test='articleInfo.desc != null and articleInfo.desc != ""'>
             , `resource_desc` = #{articleInfo.desc}

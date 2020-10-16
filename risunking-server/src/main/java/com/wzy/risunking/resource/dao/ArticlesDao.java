@@ -82,4 +82,14 @@ public interface ArticlesDao {
      * @date 2020/9/23 10:59
      */
     int articleToResourceDelete(@Param("articleInfo") ArticleInfo articleInfo);
+
+    /**
+     * 获取文章详情
+     *
+     * @param articleInfo
+     * @return java.lang.String
+     * @author Wangzy
+     * @date 2020/9/23 11:30
+     */
+    ArticleInfo articleDetail(@Param("articleInfo") ArticleInfo articleInfo);
 }

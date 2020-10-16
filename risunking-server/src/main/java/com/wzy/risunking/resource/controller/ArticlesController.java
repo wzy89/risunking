@@ -120,4 +120,22 @@ public class ArticlesController {
     public ArticleInfo articleContent(@RequestBody ArticleInfo articleInfo) {
         return articlesService.articleContent(articleInfo);
     }
+
+    /**
+     * 获取文章详情
+     *
+     * @param articleInfo
+     * @return java.lang.String
+     * @author Wangzy
+     * @date 2020/9/23 11:30
+     */
+    @RequestMapping(value = "/detailById", method = RequestMethod.POST)
+    public ArticleInfo articleDetail(@RequestBody ArticleInfo articleInfo) {
+        String articleId = articleInfo.getId();
+        if (DataCheck.isEmptyString(articleId)) {
+            throw new CommandException(1, "参数错误");
+        }
+        ArticleInfo result = articlesService.articleDetail(articleInfo);
+        return articlesService.articleContent(result);
+    }
 }

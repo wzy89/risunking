@@ -10,6 +10,7 @@ public class ArticleSearchIn extends BaseInfo {
     private String title;
     private String author;
     private String tag;
+    private String type;
     private String startDate;
     private String endDate;
 
@@ -51,5 +52,13 @@ public class ArticleSearchIn extends BaseInfo {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

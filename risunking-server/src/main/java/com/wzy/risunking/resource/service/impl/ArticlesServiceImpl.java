@@ -47,25 +47,18 @@ public class ArticlesServiceImpl implements ArticlesService {
      */
     @Override
     public List<ArticleInfo> articleList(ArticleSearchIn articleSearchIn) {
-        String title = articleSearchIn.getTitle();
-        if (!DataCheck.isEmptyString(title)) {
-            articleSearchIn.setTitle("%" + title + "%");
-        }
-        String startDate = articleSearchIn.getStartDate();
-        String endDate = articleSearchIn.getEndDate();
-        if (!DataCheck.isEmptyString(startDate) && !DataCheck.isEmptyString(endDate)) {
-            articleSearchIn.setStartDate(startDate + " 00:00:00");
-            articleSearchIn.setEndDate(endDate + " 23:59:59");
-        } else {
-            articleSearchIn.setEndDate("");
-            articleSearchIn.setStartDate("");
-        }
+        setArticleSearchInDatas(articleSearchIn);
         articleSearchIn.initFrom();
         return articlesDao.articleList(articleSearchIn);
     }
 
     @Override
     public int articleListCount(ArticleSearchIn articleSearchIn) {
+        setArticleSearchInDatas(articleSearchIn);
+        return articlesDao.articleListCount(articleSearchIn);
+    }
+
+    private void setArticleSearchInDatas(ArticleSearchIn articleSearchIn){
         String title = articleSearchIn.getTitle();
         if (!DataCheck.isEmptyString(title)) {
             articleSearchIn.setTitle("%" + title + "%");
@@ -79,7 +72,6 @@ public class ArticlesServiceImpl implements ArticlesService {
             articleSearchIn.setEndDate("");
             articleSearchIn.setStartDate("");
         }
-        return articlesDao.articleListCount(articleSearchIn);
     }
 
     /**
@@ -242,4 +234,17 @@ public class ArticlesServiceImpl implements ArticlesService {
         }
         return articleInfo;
     }
+    /**
+     * 获取文章详情
+     *
+     * @param articleInfo
+     * @return java.lang.String
+     * @author Wangzy
+     * @date 2020/9/23 11:30
+     */
+    @Override
+    public ArticleInfo articleDetail(ArticleInfo articleInfo){
+        return articlesDao.articleDetail(articleInfo);
+    }
+
 }

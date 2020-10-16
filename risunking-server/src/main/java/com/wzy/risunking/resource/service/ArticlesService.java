@@ -71,4 +71,14 @@ public interface ArticlesService {
      * @date 2020/9/23 11:30
      */
     ArticleInfo articleContent(ArticleInfo articleInfo);
+
+    /**
+     * 获取文章详情
+     *
+     * @param articleInfo
+     * @return java.lang.String
+     * @author Wangzy
+     * @date 2020/9/23 11:30
+     */
+    ArticleInfo articleDetail(ArticleInfo articleInfo);
 }

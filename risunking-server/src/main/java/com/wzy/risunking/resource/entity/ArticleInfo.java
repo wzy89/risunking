@@ -10,6 +10,7 @@ public class ArticleInfo {
 
     private String id;
     private String title;
+    private String cover;
     private String content;
     private String path;
     private String url;
@@ -18,6 +19,7 @@ public class ArticleInfo {
     private String tags;
     private String readNum;
     private String author;
+    private String type;
 
     public String getId() {
         return id;
@@ -25,6 +27,14 @@ public class ArticleInfo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
     public String getTitle() {
@@ -97,5 +107,13 @@ public class ArticleInfo {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
