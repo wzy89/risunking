@@ -37,10 +37,6 @@ CREATE TABLE IF NOT EXISTS `global_code`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `type_index`(`type`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-INSERT INTO `risunking`.`global_code`(`id`, `code`, `name`, `type`, `status`) VALUES (1, '00', '文章', 'resourceType', 1);
-INSERT INTO `risunking`.`global_code`(`id`, `code`, `name`, `type`, `status`) VALUES (2, '01', '文本', 'resourceType', 1);
-INSERT INTO `risunking`.`global_code`(`id`, `code`, `name`, `type`, `status`) VALUES (3, '02', '图片', 'resourceType', 1);
-INSERT INTO `risunking`.`global_code`(`id`, `code`, `name`, `type`, `status`) VALUES (4, '03', '视频', 'resourceType', 1);
 
 -- ----------------------------
 -- Table structure for guests
@@ -111,16 +107,6 @@ CREATE TABLE IF NOT EXISTS `tags`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `tag_code_index`(`tag_code`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (1, 'iOS', '00', 1);
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (2, 'Android', '01', 1);
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (3, 'java', '02', 1);
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (4, 'lua', '03', 1);
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (5, '阴阳师', '04', 1);
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (6, '问道', '05', 1);
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (7, '王者荣耀', '06', 1);
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (8, '游戏辅助', '07', 1);
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (9, '科技', '08', 1);
-INSERT INTO `risunking`.`tags`(`id`, `tag_name`, `tag_code`, `status`) VALUES (10, '知识', '09', 1);
 
 -- ----------------------------
 -- Table structure for time_task
@@ -133,8 +119,8 @@ CREATE TABLE IF NOT EXISTS `time_task`  (
   `task_switch` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '1' COMMENT '定时任务开关，1：启用；0：关闭',
   PRIMARY KEY (`time_task_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-INSERT INTO `risunking`.`time_task`(`time_task_id`, `task_name`, `task_desc`, `task_expression`, `task_switch`) VALUES (1, 'AutoCleanCorpseTask', '删除僵尸用户定时任务', '0 0 23 * * ?', '0');
-INSERT INTO `risunking`.`time_task`(`time_task_id`, `task_name`, `task_desc`, `task_expression`, `task_switch`) VALUES (2, 'GetDailyWordTask', '获取每日一言定时任务', '0 0 0 * * ?', '1');
+INSERT INTO `risunking`.`time_task`(`time_task_id`, `task_name`, `task_desc`, `task_expression`, `task_switch`) VALUES (1, 'AutoCleanCorpseTask', '删除僵尸用户定时任务', '0 0 23 * * ?', '0') on duplicate key update  `time_task_id`='1';
+INSERT INTO `risunking`.`time_task`(`time_task_id`, `task_name`, `task_desc`, `task_expression`, `task_switch`) VALUES (2, 'GetDailyWordTask', '获取每日一言定时任务', '0 0 0 * * ?', '1') on duplicate key update `time_task_id`='2';
 
 -- ----------------------------
 -- Table structure for user
