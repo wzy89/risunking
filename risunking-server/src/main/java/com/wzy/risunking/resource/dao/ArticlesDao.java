@@ -14,6 +14,16 @@ import java.util.List;
  * @date 2020/9/15 9:45
  */
 public interface ArticlesDao {
+
+    /**
+     * 查询文章--tops
+     *
+     * @return java.util.List<com.wzy.risunking.resource.entity.ArticleInfo>
+     * @author Wangzy
+     * @date 2020/6/24 17:33
+     */
+    List<ArticleInfo> articleTops(@Param("articleSearchIn") ArticleSearchIn articleSearchIn);
+
     /**
      * 查询文章
      *

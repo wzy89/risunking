@@ -1,5 +1,6 @@
 package com.wzy.risunking.resource.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.wzy.risunking.global.config.Config;
 import com.wzy.risunking.global.entity.CommandException;
 import com.wzy.risunking.global.entity.Response;
@@ -11,10 +12,12 @@ import com.wzy.risunking.utils.CommonUtils;
 import com.wzy.risunking.utils.DataCheck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -34,9 +37,40 @@ public class ArticlesServiceImpl implements ArticlesService {
      * 自定义文章文件类型
      */
     private static String articleFileExtension = ".art";
+    private static String articleTopsKey = "articleTopsKey";
 
     @Resource
-    ArticlesDao articlesDao;
+    private ArticlesDao articlesDao;
+
+    @Resource
+    private RedisTemplate<String,String> redisTemplate;
+
+    /**
+     * 文章列表--tops
+     *
+     * @param articleSearchIn
+     * @return java.util.List<com.wzy.risunking.resource.entity.ArticleInfo>
+     * @author Wangzy
+     * @date 2020/6/24 17:33
+     */
+    @Override
+    public List<ArticleInfo> articleTops(ArticleSearchIn articleSearchIn) {
+        String resultStr = redisTemplate.opsForValue().get(articleTopsKey);
+        if (DataCheck.isEmptyString(resultStr)){
+            synchronized (this) {
+                resultStr = redisTemplate.opsForValue().get(articleTopsKey);
+                if (DataCheck.isEmptyString(resultStr)){
+                    List<ArticleInfo> result = articlesDao.articleList(articleSearchIn);
+                    redisTemplate.opsForValue().set(articleTopsKey, JSON.toJSONString(result));
+                    return result;
+                }else {
+                    return JSON.parseArray(resultStr, ArticleInfo.class);
+                }
+            }
+        } else {
+            return JSON.parseArray(resultStr, ArticleInfo.class);
+        }
+    }
 
     /**
      * 文章列表
@@ -49,7 +83,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     public List<ArticleInfo> articleList(ArticleSearchIn articleSearchIn) {
         setArticleSearchInDatas(articleSearchIn);
         articleSearchIn.initFrom();
-        return articlesDao.articleList(articleSearchIn);
+        return articlesDao.articleTops(articleSearchIn);
     }
 
     @Override

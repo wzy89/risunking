@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.wzy.risunking.resource.dao.ArticlesDao">
 
+    <select id="articleTops" parameterType="com.wzy.risunking.resource.entity.ArticleSearchIn" resultType="com.wzy.risunking.resource.entity.ArticleInfo">
+        SELECT  * FROM
+        SELECT a.resource_cover as cover,a.resource_id id,a.resource_desc 'desc',a.resource_href url,a.resource_name title,
+        a.resource_path path,a.resource_owner author,a.expand readNum,GROUP_CONCAT(c.tag_name) tags,
+        GROUP_CONCAT(c.tag_code) tagCodes FROM risunking.hots d
+        INNER JOIN risunking.resource a ON d.top_id=a.resource_id
+        LEFT JOIN risunking.resource_to_tags b ON b.resource_id=a.resource_id
+        LEFT JOIN risunking.tags c ON c.tag_code = b.tag_code
+        WHERE d.type_code='00'
+        ORDER BY d.hot
+        LIMIT #{articleSearchIn.size}
+    </select>
+
     <select id="articleList" parameterType="com.wzy.risunking.resource.entity.ArticleSearchIn" resultType="com.wzy.risunking.resource.entity.ArticleInfo">
         SELECT * FROM (SELECT a.resource_cover as cover,a.resource_id id,a.resource_desc 'desc',a.resource_href url,a.resource_name title,
         a.resource_path path,a.resource_owner author,a.expand readNum,GROUP_CONCAT(c.tag_name) tags,

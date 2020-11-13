@@ -13,6 +13,15 @@ import java.util.List;
  */
 public interface ArticlesService {
     /**
+     * 文章列表--tops
+     *
+     * @return java.util.List<com.wzy.risunking.resource.entity.ArticleInfo>
+     * @author Wangzy
+     * @date 2020/6/24 17:33
+     */
+    List<ArticleInfo> articleTops(ArticleSearchIn articleSearchIn);
+
+    /**
      * 文章列表
      *
      * @return java.util.List<com.wzy.risunking.resource.entity.ArticleInfo>

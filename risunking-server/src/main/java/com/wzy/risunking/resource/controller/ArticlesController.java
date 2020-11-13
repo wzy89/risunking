@@ -8,6 +8,7 @@ import com.wzy.risunking.resource.service.ArticlesService;
 import com.wzy.risunking.utils.DataCheck;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 /**
@@ -21,8 +22,29 @@ import java.util.List;
 @RequestMapping(value = "web/resource/articles")
 public class ArticlesController {
 
+    private static int MAXTOPSIZE = 32;
+
     @Autowired
     private ArticlesService articlesService;
+
+    /**
+     * 查询文章列表--top
+     *
+     * @param articleSearchIn
+     * @return java.util.List<com.wzy.risunking.resource.entity.ArticleInfo>
+     * @author Wangzy
+     * @date 2020/6/24 17:45
+     */
+    @RequestMapping(value = "/tops", method = RequestMethod.POST)
+    public Response<List<ArticleInfo>> articleTops(@RequestBody ArticleSearchIn articleSearchIn) {
+        int size = articleSearchIn.getSize();
+        if (size == 0 || size > MAXTOPSIZE) {
+            size = MAXTOPSIZE;
+            articleSearchIn.setSize(size);
+        }
+        List<ArticleInfo> data = articlesService.articleList(articleSearchIn);
+        return new Response<>(Response.SUCCESS_RESULT, Response.SUCCESS_RESULT_MSG, data, size);
+    }
 
     /**
      * 查询文章列表
