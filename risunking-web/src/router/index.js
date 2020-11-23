@@ -6,6 +6,9 @@ import Code from '@/views/code/Code'
 import Read from '@/views/read/Read'
 import Game from '@/views/game/Game'
 import About from '@/views/about/About'
+import Edit from '@/views/edit/Edit'
+import Detail from '@/views/detail/Detail'
+
 
 Vue.use(Router)
 
@@ -35,6 +38,16 @@ export default new Router({
       path: '/about',
       name: 'About',
       component: About
+    },
+    {
+      path: '/edit-wzy',
+      name: 'Edit',
+      component: Edit
+    },
+    {
+      path: '/detail',
+      name: 'Detail',
+      component: Detail
     }
   ]
 })

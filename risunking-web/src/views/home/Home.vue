@@ -2,13 +2,12 @@
     <div class="home-main-container">
         <div class="home-card-container" v-for="item in topData" :key="item.id">
             <homeCard :randerData="item" :clickCard="clickCard" />
-        </div>
+        </div>                  
     </div>
 </template>
 
 <script>
 import homeCard from "@/components/card/home_card.vue";
-import { Loading } from 'element-ui';
 export default {
     components: {
         homeCard
@@ -24,29 +23,47 @@ export default {
     methods: {
         clickCard(item){
             console.log(item);
+            const { href } = this.$router.resolve({
+                name: "Detail",
+                query: { 
+                    articleType: item.type,
+                    resourcePath: item.path,
+                    articleTitle: item.title,
+                    articleDesc: item.desc,
+                    cover: item.cover,
+                    articleId: item.id
+                }
+            });
+            window.open(href, '_blank');
         },
         /** 获取数据 */
         getTops() {
-            Loading.service({ fullscreen: true });
-            for(var i=0; i<8; i++){
-                var data = {
-                    id:i, 
-                    imgPath:'http://www.risunking.com/web/storage/downloadFile?fileName=8eca1c38-5488-464f-9514-b2e0ec606862.png&tsp='+this.$utils.getTsp(),
-                    name:'测试数据不算数的',
-                    tags:'啊啊啊｜嗷嗷｜呵呵',
-                    remarks:'测试数据不好看没关系，测试数据，不好看没关系;测试数据不好看没关系，测试数据，不好看没关系,测试数据不好看没关系，测试数据，不好看没关系.'
-                }
-                this.topData.push(data);
+            var params = {
+                'size':16
             }
-            Loading.service({ fullscreen: true }).close();
+            this.$jsonPost('web/resource/articles/tops',params)
+            .then((response)=>{
+                response.result.forEach((item)=>{
+                    if(item.cover){
+                        item.coverImg = this.$store.state.baseUrl + this.$store.state.downloadUrl + '?fileName='+item.cover+'&tsp='+this.$utils.getTsp();
+                    }
+                    if(item.desc.length>85){
+                        item.marks = item.desc.substring(0,84)+"...";
+                    }else{
+                        item.marks = item.desc;
+                    }
+                    this.topData.push(item);
+                })
+            });
         }
     }
 }
 </script>
 
-
 <style scoped>
 .home-main-container{
+    display: flex;
+    flex-wrap: wrap;
     margin-top: 20px;
     display: flex;
     flex-wrap: wrap;

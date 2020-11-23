@@ -34,7 +34,30 @@
                 <el-input type="textarea" style="width: 80%;" :rows="8" placeholder="请输入留言" v-model="textarea"></el-input>
                 <div style="margin-top:10px">留言会公开显示，请勿在留言内<br>容写下微信号等私人联系方式，<br>谨防诈骗。如果你不想发布公开<br>留言，也可以发送邮件到<br> wzyapdp@163.com 与我联系。</div>
                 <el-input v-model="input" style="width: 80%;margin-top:30px" placeholder="请输入您的昵称"></el-input>
-                <el-button style="margin-top:25px" type="info" :disabled="(input==''||textarea=='')" round @click="saveMessage"> 完成 </el-button>
+                <div>
+                    <el-button style="margin-top:25px" type="plain" :disabled="(input==''||textarea=='')" round @click="saveMessage"> 留言 </el-button>
+                    <el-button style="margin-top:25px" type="plain" round @click="showMsgList = true"> 查看 </el-button>
+                    <el-drawer :visible.sync="showMsgList" direction="rtl" size="35%">
+                        <div class="guest-cell-container-warp">
+                            <div class="infinite-list-wrapper" style="overflow:auto; height:100%;">
+                                <ul v-infinite-scroll="loadMoreMessages" infinite-scroll-disabled="canNotLoadMore">
+                                    <div class="guest-cell" v-for="item in guestList" :key="item.id">
+                                        <div style="padding-top:5px; padding-bottom:5px; padding-left:0px; padding-right:10px; text-align:left; color:#333; font-size:15px; line-height:19pt;">{{item.content}}</div>
+                                        <div style="width:100%; padding-bottom: 5px; display:flex; flex-direction:row-reverse;">
+                                            <div style="width:160px; color:#666;font-size:11px;">{{item.createDate}}</div>
+                                            <div style="width:100px; text-align:right; color:#666;font-size:13px;">{{item.nickName}}</div>
+                                        </div>
+                                        <div style="height:1px; background:#eee; width:100%;"></div>
+                                    </div>
+                                </ul>
+                                <p v-if="loading" style="color:#666;font-size:13px;">加载中...</p>
+                                <p v-if="noMore" style="color:#666;font-size:13px;">没有更多数据</p>
+                            </div>
+                            <div style="width:100%; height:78px;"></div>
+                        </div>
+                        
+                    </el-drawer>
+                </div>
             </div>
         </div>
     </div>
@@ -46,44 +69,45 @@ export default {
     data() {
         return {
             dailyWords: [],
+            guestList:[],
             currentImgPath:'',
             currentText:'',
             textarea: '',
-            input: ''
+            input: '',
+            showMsgList:false,
+            guestSize: 10,
+            guestPage: 1,
+            guestTotal:0,
+            loading: false
         };
     },
     created() {
         this.getDailyWords();
+        this.messageList();
+    },
+    computed: {
+      noMore () {
+        return this.guestList.length >= this.guestTotal;
+      },
+      canNotLoadMore () {
+        return this.loading || this.noMore;
+      }
     },
     methods: {
         /** 获取数据 */
         getDailyWords() {
-            Loading.service({ fullscreen: true });
-            var dailyWord1 = {
-                text:'不要以为无所事事和试图忘却会给你们带来安慰。要像往常一样继续工作，因为工作是使人愉快的安慰。',
-                src:'http://www.risunking.com/web/storage/downloadFile?fileName=9ab49723-5b79-409b-a708-d59f41f873f2.png'
-            }
-            this.dailyWords.push(dailyWord1);
-            var dailyWord2 = {
-                text:'几处早莺争暖树，谁家新燕啄春泥。',
-                src:'http://www.risunking.com/web/storage/downloadFile?fileName=82ebdda0-0da7-449a-94ff-382496375fdc.png'
-            }
-            this.dailyWords.push(dailyWord2);
-            var dailyWord3 = {
-                text:'哲学家们只是用不同的方式解释世界，而问题在于改变世界。',
-                src:'http://www.risunking.com/web/storage/downloadFile?fileName=8eca1c38-5488-464f-9514-b2e0ec606862.png'
-            }
-            this.dailyWords.push(dailyWord3);
-            
-            this.currentImgPath = this.dailyWords[0].src+'&tsp='+this.$utils.getTsp();
-            this.currentText = this.dailyWords[0].text;
-            this.dailyWords.splice(0,1);
-            Loading.service({ fullscreen: true }).close();
+            this.$jsonPost('/web/resource/dailyWord/list',{})
+            .then((response)=>{
+                this.dailyWords = response.result;
+                this.currentImgPath = this.$store.state.baseUrl+this.$store.state.downloadUrl+"?fileName="+this.dailyWords[0].src+'&tsp='+this.$utils.getTsp();
+                this.currentText = this.dailyWords[0].text;
+                this.dailyWords.splice(0,1);
+            });
         },
         /** 刷新图片 */
         refreshPic(){
             if(this.dailyWords.length > 0){
-                this.currentImgPath = this.dailyWords[0].src+'&tsp='+this.$utils.getTsp();
+                this.currentImgPath = this.$store.state.baseUrl+this.$store.state.downloadUrl+"?fileName="+this.dailyWords[0].src+'&tsp='+this.$utils.getTsp();
                 this.currentText = this.dailyWords[0].text;
                 this.dailyWords.splice(0,1);
             }else{
@@ -92,7 +116,53 @@ export default {
         },
         /** 保存留言 */
         saveMessage(){
-            console.log('留言：'+this.textarea+";昵称："+this.input);
+            let params = {
+                "expand":"",
+                "content":this.textarea,
+                "nickName":this.input,
+                "email":""
+            }
+            this.$jsonPost('/web/resource/guests/add',params)
+            .then((response)=>{
+                this.$message({
+                    message: '留言成功，但您的留言需要作者审核。',
+                    type: 'success'
+                });
+                this.textarea = '';
+                this.input = '';
+            });
+        },
+        /** 展示留言列表 第一页 */
+        messageList(){
+            this.loading = true;
+            this.guestList = [];
+            this.guestSize = 10;
+            this.guestPage = 1;
+            let params = {
+                "page":this.guestPage,
+                "size":this.guestSize
+            }
+            this.$jsonPost('/web/resource/guests/list',params)
+            .then((response)=>{
+                this.guestList = this.guestList.concat(response.result);
+                this.guestTotal = response.count;
+                this.loading = false;
+            });
+        },
+        /** 展示留言列表 更多*/
+        loadMoreMessages(){
+            this.loading = true;
+            this.guestPage ++;
+            let params = {
+                "page":this.guestPage,
+                "size":2
+            }
+            this.$jsonPost('/web/resource/guests/list',params)
+            .then((response)=>{
+                this.guestList = this.guestList.concat(response.result);
+                this.guestTotal = response.count;
+                this.loading = false;
+            });
         }
     }
 }
@@ -169,4 +239,16 @@ export default {
     width: 25%;
     height: 80%;
 }
-</style>>
+.guest-cell-container-warp{
+    overflow: scroll;
+    width: 100%;
+    height: 100vh;
+}
+
+.list{
+    height: 100%;
+}
+.guest-cell{
+    margin-bottom: 2px;
+}
+</style>

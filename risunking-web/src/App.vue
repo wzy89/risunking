@@ -6,7 +6,10 @@
           <router-link  :to="item.path" ></router-link>
         </el-tab-pane>
       </el-tabs>
-      <router-view/>
+      <div class="router-view-container">
+        <router-view/>
+      </div>
+      
     </div>
 </template>
 
@@ -22,8 +25,8 @@ export default {
         {id:1,path:'/',name:' 主页 '},
         {id:2,path:'/code',name:' 编码 '},
         {id:3,path:'/read',name:' 阅读 '},
-        // {id:4,path:'/game',name:' 娱乐 '},
-        {id:4,path:'/about',name:' 发个呆 '}
+        {id:4,path:'/game',name:' 娱乐 '},
+        {id:5,path:'/about',name:' 发个呆 '}
       ]
     };
   },
@@ -33,24 +36,35 @@ export default {
       this.$store.commit('setActiveIndex', this.currentSelectedIndex);
     }
   },
-  
+  mounted: function() {
+    document.getElementsByTagName("body")[0].className="body-style";
+  }
 }
 </script>
 
 <style>
+.body-style{
+  margin: 0;
+}
 #app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction:column;
+  align-items: center;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 25px;
 }
 /** tab居中对齐 */
 .el-tabs__nav-wrap
 .el-tabs__nav-scroll
 .el-tabs__nav {
+    height: 44px;
     width: 100%;
+    padding-top: 10px;
     display: flex;
     justify-content: center;
 }
@@ -66,5 +80,10 @@ export default {
 .el-tabs__item{
   font-size: 18px;
 }
-
+/** 设置内容大小位置 */
+.router-view-container{
+  width: 100%;
+  overflow: scroll;
+  flex-grow: 1;
+}
 </style>

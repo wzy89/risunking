@@ -1,16 +1,16 @@
 <template>
     <el-card class="home-card" shadow="hover" @click.native="handleClickCard" :body-style="{'display':'flex','justify-content':'space-between','align-items':'start','flex-direction':'column','padding':'10px'}">
         <div class="home-card-image">
-            <img :src="randerData.imgPath" style="cursor: pointer; width: 100%; height: 100%; display: block;" >
+            <img :src="randerData.coverImg" style="cursor: pointer; width: 100%; height: 100%; display: block;" >
         </div>
         <div class="home-card-name">
-            {{randerData.name===undefined||randerData.name===null||randerData.name===''?'无标题':randerData.name}}
+            {{randerData.title===undefined||randerData.title===null||randerData.title===''?'无标题':randerData.title}}
         </div>
         <div class="home-card-tags">
-            {{randerData.tags===undefined||randerData.tags===null||randerData.tags===''?'无标签':randerData.tags}}
+            {{randerData.tags===undefined||randerData.tags===null||randerData.tags===''?'无标签':randerData.tags.replace(/,/g,'  |  ')}}
         </div>
         <div class="home-card-remarks">
-            {{randerData.remarks===undefined||randerData.remarks===null||randerData.remarks===''?'无简介':randerData.remarks}}
+            {{randerData.marks===undefined||randerData.marks===null||randerData.marks===''?'无简介':randerData.marks}}
         </div>
     </el-card>
 </template>
@@ -24,10 +24,10 @@ export default {
       default: () => {
         return {
             id:'0',
-            imgPath:'',
+            coverImg:'',
             name:'',
             tags:'',
-            remarks:''
+            marks:''
         };
       }
     },
@@ -45,7 +45,6 @@ export default {
   created() {},
   methods: {
     handleClickCard() {
-      console.info("handleClickCard");
       const randerData = this.deepCopyJsonData(this.randerData, this.type);
       this.clickCard(randerData);
     },

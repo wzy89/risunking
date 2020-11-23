@@ -1,4 +1,4 @@
-<template>
+<template> 
     <div class="home-read-container">
         <div class="read-cell-container" v-for="item in readList" :key="item.id">
             <readCell class="read-cell" :randerData="item" :clickCell="clickCell" />
@@ -21,12 +21,32 @@ export default {
     created() {
         this.getTops();
     },
+    computed: {
+      noMore () {
+        return this.topData.length >= this.count;
+      },
+      canNotLoadMore () {
+        return this.loading || this.noMore;
+      }
+    },
     methods: {
         clickCell(item){
             console.log(item);
+            const { href } = this.$router.resolve({
+                name: "Detail",
+                query: { 
+                    articleType: item.type,
+                    resourcePath: item.path,
+                    articleTitle: item.title,
+                    articleDesc: item.desc,
+                    cover: item.cover,
+                    articleId: item.id
+                }
+            });
+            window.open(href, '_blank');
         },
         /** 获取数据 */
-        getTops() {
+        getList() {
             Loading.service({ fullscreen: true });
             for(var i=0; i<10; i++){
                 var data = {

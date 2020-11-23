@@ -99,6 +99,7 @@ export default {
     height: 30px;
 }
 .code-cell-img{
+    padding-left: 5px;
     width: 150px;
     height: 100px;
 }
