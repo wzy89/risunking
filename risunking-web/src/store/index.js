@@ -4,7 +4,7 @@ Vue.use(Vuex);
 
 const state = {
     activeIndex: sessionStorage.getItem('activeIndex')||'/',
-    baseUrl: "http://localhost:9999",//"http://www.risunking.com",
+    baseUrl: "http://www.risunking.com",//"http://localhost:9999"
     downloadUrl: "/web/storage/downloadFile",
     uploadUrl:"/web/storage/uploadFile"
 }
