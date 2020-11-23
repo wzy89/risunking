@@ -42,7 +42,7 @@ public class ArticlesController {
             size = MAXTOPSIZE;
             articleSearchIn.setSize(size);
         }
-        List<ArticleInfo> data = articlesService.articleList(articleSearchIn);
+        List<ArticleInfo> data = articlesService.articleTops(articleSearchIn);
         return new Response<>(Response.SUCCESS_RESULT, Response.SUCCESS_RESULT_MSG, data, size);
     }
 

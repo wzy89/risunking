@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * ArticlesServiceImpl
@@ -37,13 +38,9 @@ public class ArticlesServiceImpl implements ArticlesService {
      * 自定义文章文件类型
      */
     private static String articleFileExtension = ".art";
-    private static String articleTopsKey = "articleTopsKey";
 
     @Resource
     private ArticlesDao articlesDao;
-
-    @Resource
-    private RedisTemplate<String,String> redisTemplate;
 
     /**
      * 文章列表--tops
@@ -55,21 +52,8 @@ public class ArticlesServiceImpl implements ArticlesService {
      */
     @Override
     public List<ArticleInfo> articleTops(ArticleSearchIn articleSearchIn) {
-        String resultStr = redisTemplate.opsForValue().get(articleTopsKey);
-        if (DataCheck.isEmptyString(resultStr)){
-            synchronized (this) {
-                resultStr = redisTemplate.opsForValue().get(articleTopsKey);
-                if (DataCheck.isEmptyString(resultStr)){
-                    List<ArticleInfo> result = articlesDao.articleList(articleSearchIn);
-                    redisTemplate.opsForValue().set(articleTopsKey, JSON.toJSONString(result));
-                    return result;
-                }else {
-                    return JSON.parseArray(resultStr, ArticleInfo.class);
-                }
-            }
-        } else {
-            return JSON.parseArray(resultStr, ArticleInfo.class);
-        }
+        List<ArticleInfo> result = articlesDao.articleList(articleSearchIn);
+        return result;
     }
 
     /**
@@ -83,7 +67,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     public List<ArticleInfo> articleList(ArticleSearchIn articleSearchIn) {
         setArticleSearchInDatas(articleSearchIn);
         articleSearchIn.initFrom();
-        return articlesDao.articleTops(articleSearchIn);
+        return articlesDao.articleList(articleSearchIn);
     }
 
     @Override
@@ -92,7 +76,7 @@ public class ArticlesServiceImpl implements ArticlesService {
         return articlesDao.articleListCount(articleSearchIn);
     }
 
-    private void setArticleSearchInDatas(ArticleSearchIn articleSearchIn){
+    private void setArticleSearchInDatas(ArticleSearchIn articleSearchIn) {
         String title = articleSearchIn.getTitle();
         if (!DataCheck.isEmptyString(title)) {
             articleSearchIn.setTitle("%" + title + "%");
@@ -268,6 +252,7 @@ public class ArticlesServiceImpl implements ArticlesService {
         }
         return articleInfo;
     }
+
     /**
      * 获取文章详情
      *
@@ -277,7 +262,7 @@ public class ArticlesServiceImpl implements ArticlesService {
      * @date 2020/9/23 11:30
      */
     @Override
-    public ArticleInfo articleDetail(ArticleInfo articleInfo){
+    public ArticleInfo articleDetail(ArticleInfo articleInfo) {
         return articlesDao.articleDetail(articleInfo);
     }
 
