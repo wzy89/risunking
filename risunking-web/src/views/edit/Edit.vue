@@ -229,7 +229,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .title-container{
     display: flex;
     width:100%; 

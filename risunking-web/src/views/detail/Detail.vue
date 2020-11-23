@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="detail-swapper">
     <h2>{{articleTitle}}</h2>
     <div class="ql-container ql-snow ql-class-container">    
         <div class="ql-editor">
@@ -89,7 +89,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.detail-swapper{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 .el-tabs{
     display: none;
 }
