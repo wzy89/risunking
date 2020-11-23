@@ -1,4 +1,5 @@
 <template>
+<div class="about-swapper">
     <div class="about-container">
         <div class="about-t1">
             <img :src="currentImgPath" style="width: 100%; height: 100%; display: block;" >
@@ -37,10 +38,10 @@
                 <div>
                     <el-button style="margin-top:25px" type="plain" :disabled="(input==''||textarea=='')" round @click="saveMessage"> 留言 </el-button>
                     <el-button style="margin-top:25px" type="plain" round @click="showMsgList = true"> 查看 </el-button>
-                    <el-drawer :visible.sync="showMsgList" direction="rtl" size="35%">
+                    <el-drawer :visible.sync="showMsgList" :append-to-body="true" direction="rtl" size="35%">
                         <div class="guest-cell-container-warp">
                             <div class="infinite-list-wrapper" style="overflow:auto; height:100%;">
-                                <ul v-infinite-scroll="loadMoreMessages" infinite-scroll-disabled="canNotLoadMore">
+                                <ul v-infinite-scroll="loadMoreGuests" :infinite-scroll-disabled="canNotLoadMore">
                                     <div class="guest-cell" v-for="item in guestList" :key="item.id">
                                         <div style="padding-top:5px; padding-bottom:5px; padding-left:0px; padding-right:10px; text-align:left; color:#333; font-size:15px; line-height:19pt;">{{item.content}}</div>
                                         <div style="width:100%; padding-bottom: 5px; display:flex; flex-direction:row-reverse;">
@@ -50,8 +51,8 @@
                                         <div style="height:1px; background:#eee; width:100%;"></div>
                                     </div>
                                 </ul>
-                                <p v-if="loading" style="color:#666;font-size:13px;">加载中...</p>
-                                <p v-if="noMore" style="color:#666;font-size:13px;">没有更多数据</p>
+                                <p v-if="loading" style="color:#666;font-size:13px;text-align:center;">加载中...</p>
+                                <p v-if="noMore" style="color:#666;font-size:13px;text-align:center;">没有更多数据</p>
                             </div>
                             <div style="width:100%; height:78px;"></div>
                         </div>
@@ -61,6 +62,7 @@
             </div>
         </div>
     </div>
+</div>
 </template>>
 
 <script>
@@ -83,7 +85,7 @@ export default {
     },
     created() {
         this.getDailyWords();
-        this.messageList();
+        this.getGuestList();
     },
     computed: {
       noMore () {
@@ -133,7 +135,7 @@ export default {
             });
         },
         /** 展示留言列表 第一页 */
-        messageList(){
+        getGuestList(){
             this.loading = true;
             this.guestList = [];
             this.guestSize = 10;
@@ -150,7 +152,7 @@ export default {
             });
         },
         /** 展示留言列表 更多*/
-        loadMoreMessages(){
+        loadMoreGuests(){
             this.loading = true;
             this.guestPage ++;
             let params = {
@@ -170,6 +172,12 @@ export default {
 
 
 <style scoped>
+.about-swapper{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 .about-container{
     display: flex;
     flex-direction:column;

@@ -1,29 +1,35 @@
-<template> 
-    <div class="home-read-container">
-        <div class="read-cell-container" v-for="item in readList" :key="item.id">
-            <readCell class="read-cell" :randerData="item" :clickCell="clickCell" />
-        </div>
+<template>
+    <div class="infinite-list-wrapper" style="overflow:auto;height:100%;">
+        <ul v-infinite-scroll="loadMoreArts" :infinite-scroll-disabled="canNotLoadMore">
+            <div class="code-cell-container" v-for="item in readList" :key="item.id">
+                <codeCell class="code-cell" :randerData="item" :clickCell="clickCell" />
+            </div>
+        </ul>
+        <p v-if="loading" style="color:#666;font-size:13px;text-align:center;">加载中...</p>
+        <p v-if="noMore" style="color:#666;font-size:13px;text-align:center;">没有更多数据</p>
     </div>
 </template>
 
 <script>
-import readCell from "@/components/cell/code_read_cell.vue";
-import { Loading } from 'element-ui';
+import codeCell from "@/components/cell/code_read_cell.vue";
 export default {
     components: {
-        readCell
+        codeCell
     },
     data() {
         return {
-            readList: []
+            readList: [],
+            page:1,
+            totalCount:0,
+            loading:false
         };
     },
     created() {
-        this.getTops();
+        this.getList();
     },
     computed: {
       noMore () {
-        return this.topData.length >= this.count;
+        return this.readList.length >= this.totalCount;
       },
       canNotLoadMore () {
         return this.loading || this.noMore;
@@ -47,19 +53,61 @@ export default {
         },
         /** 获取数据 */
         getList() {
-            Loading.service({ fullscreen: true });
-            for(var i=0; i<10; i++){
-                var data = {
-                    id:i, 
-                    imgPath:i%2==0?'http://www.risunking.com/web/storage/downloadFile?fileName=8eca1c38-5488-464f-9514-b2e0ec606862.png&tsp='+this.$utils.getTsp():'',
-                    name:'测试数据不算数的',
-                    tags:['啊啊啊','嗷嗷','呵呵'],
-                    remarks:'测试数据不好看没关系，测试数据，不好看没关系;测试数据不好看没关系，测试数据.测试数据不好看没关系，测试数据，不好看没关系测试数据不好看没关系，测试数据，不好看没关系',
-                    thumbUps:'0'
-                }
-                this.readList.push(data);
+            this.page = 1;
+            this.readList = [];
+            this.totalCount = 0;
+            var params = {
+                'page':this.page,
+                'size':10,
+                'type':'01'
             }
-            Loading.service({ fullscreen: true }).close();
+            this.$jsonPost('web/resource/articles/list',params)
+            .then((response)=>{
+                this.totalCount = response.count;
+                response.result.forEach((item)=>{
+                    if(item.cover){
+                        item.coverImg = this.$store.state.baseUrl + this.$store.state.downloadUrl + '?fileName='+item.cover+'&tsp='+this.$utils.getTsp();
+                    }
+                    if(item.tags){
+                        item.tagList = item.tags.split(',');
+                    }
+                    if(item.desc.length>100){
+                        item.marks = item.desc.substring(0,99)+"...";
+                    }else{
+                        item.marks = item.desc;
+                    }
+                    this.readList.push(item);
+                })
+            });
+        },
+        /** 展示文章列表 更多*/
+        loadMoreArts(){
+            this.loading = true;
+            this.page ++;
+            var params = {
+                'page':this.page,
+                'size':10,
+                'type':'01'
+            }
+            this.$jsonPost('web/resource/articles/list',params)
+            .then((response)=>{
+                this.loading = false;
+                response.result.forEach((item)=>{
+                    if(item.cover){
+                        item.coverImg = this.$store.state.baseUrl + this.$store.state.downloadUrl + '?fileName='+item.cover+'&tsp='+this.$utils.getTsp();
+                    }
+                    if(item.tags){
+                        item.tagList = item.tags.split(',');
+                    }
+                    if(item.desc.length>100){
+                        item.marks = item.desc.substring(0,99)+"...";
+                    }else{
+                        item.marks = item.desc;
+                    }
+                    this.readList.push(item);
+                });
+                this.totalCount = response.count;
+            });
         }
     }
 }
@@ -67,16 +115,11 @@ export default {
 
 
 <style scoped>
-.home-read-container{
-    display: flex;
-    flex-direction: column;
-    justify-content:center;
-}
-.read-cell-container{
+.code-cell-container{
     display: flex;
     justify-content:center;
 }
-.read-cell{
+.code-cell{
     width:60%;
 }
 </style>>

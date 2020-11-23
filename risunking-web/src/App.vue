@@ -9,7 +9,6 @@
       <div class="router-view-container">
         <router-view/>
       </div>
-      
     </div>
 </template>
 
@@ -47,8 +46,11 @@ export default {
   margin: 0;
 }
 #app {
-  width: 100vw;
-  height: 100vh;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
   display: flex;
   flex-direction:column;
   align-items: center;
@@ -82,8 +84,11 @@ export default {
 }
 /** 设置内容大小位置 */
 .router-view-container{
-  width: 100%;
-  overflow: scroll;
-  flex-grow: 1;
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 68px;
+  bottom: 0px;
+  overflow: hidden;
 }
 </style>

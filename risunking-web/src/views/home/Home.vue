@@ -1,8 +1,10 @@
 <template>
-    <div class="home-main-container">
-        <div class="home-card-container" v-for="item in topData" :key="item.id">
-            <homeCard :randerData="item" :clickCard="clickCard" />
-        </div>                  
+    <div class="home-main-swapper">
+        <div class="home-main-container">
+            <div class="home-card-container" v-for="item in topData" :key="item.id">
+                <homeCard :randerData="item" :clickCard="clickCard" />
+            </div>                  
+        </div>
     </div>
 </template>
 
@@ -61,6 +63,12 @@ export default {
 </script>
 
 <style scoped>
+.home-main-swapper{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
 .home-main-container{
     display: flex;
     flex-wrap: wrap;
@@ -69,7 +77,6 @@ export default {
     flex-wrap: wrap;
     padding-left: 50px;
     padding-right: 50px;
-    height: 100%;
 }
 .home-card-container{
     display: flex;
