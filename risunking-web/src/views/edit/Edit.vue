@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="edit-swipper">
     <div class="title-container">
         <el-input class="title-style" placeholder="请输入文章资源编号" v-model="articleId">
             <template slot="prepend">ID：</template>
@@ -48,7 +48,6 @@
         @focus="onEditorFocus($event)"
         @change="onEditorChange($event)">
     </quill-editor>
-    <div style="width:100%;height:10px;margin-top:60px;"></div>
 </div>
 </template>
 
@@ -230,6 +229,13 @@ export default {
 </script>
 
 <style scoped>
+.edit-swipper{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+}
 .title-container{
     display: flex;
     width:100%; 
@@ -282,7 +288,7 @@ export default {
     display: block;
 }
 .quill-editor {
-    height: 500px;
+    height: 400px;
     width: 90%;
     margin-left: 5%;
 }

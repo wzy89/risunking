@@ -3,8 +3,7 @@
     <h2>{{articleTitle}}</h2>
     <div class="ql-container ql-snow ql-class-container">    
         <div class="ql-editor">
-            <div v-html="content">
-            </div>
+            <div v-html="content" />
         </div>
     </div>
 </div>
@@ -93,25 +92,31 @@ export default {
 .detail-swapper{
     width: 100%;
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
 }
 .el-tabs{
     display: none;
 }
 .ql-class-container {
     width: 100%;
+    height: 100%;
     border: 0;
     border-color: white;
-    height: 100%;
 }
 .ql-container.ql-snow{
     border: 0;
     border-color: white;
 }
 .ql-editor{
-    border-color: white;
     width: 70%;
+    height: 100%;
     margin-left: 15%;
+    border-color: white;
+    scrollbar-width: none; /* firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.ql-editor::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
 }
 </style>
